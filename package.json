@@ -7,8 +7,9 @@
 		"dev": "npm run dev:node",
 		"dev:static": "VITE_ADAPTER=static vite dev",
 		"dev:node": "VITE_ADAPTER=node vite dev --port 3000 --host",
+		"dev:android": "npx cap sync && npx cap run android && npm run dev",
 		"build": "vite build",
-		"build2": "npm run build:node && npm run build:static",
+		"build-local": "npm run build:node && npm run build:static",
 		"build:node": "VITE_ADAPTER=node vite build",
 		"build:static": "VITE_ADAPTER=static vite build",
 		"prepare": "svelte-kit sync",
@@ -56,6 +57,9 @@
 		"@capacitor/barcode-scanner": "^2.2.0",
 		"@capacitor/core": "^7.4.3",
 		"@capacitor/ios": "^7.4.3",
-		"@sveltejs/adapter-vercel": "^5.10.3"
+		"@sveltejs/adapter-vercel": "^5.10.3",
+		"cheerio": "^1.1.2",
+		"runed": "^0.35.1",
+		"zod": "^4.1.12"
 	}
 }
