@@ -16,7 +16,7 @@ const adapterNodeConfigured = adapterNode({
 	out: 'build-node'
 });
 
-const adapterVercelConfigured = adapterVercel({});
+const adapterVercelConfigured = adapterVercel();
 
 // if node adapter, set PUBLIC_API_BASE to '' and update the env variable
 // or also if in dev mode
