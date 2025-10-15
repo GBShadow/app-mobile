@@ -4,7 +4,9 @@ import 'dotenv/config';
 const config: CapacitorConfig = {
 	appId: 'com.example.app',
 	appName: 'app-mobile',
-	webDir: 'build-static',
+	...(process.env.VITE_ADAPTER !== 'vercel' && {
+		webDir: 'build-static'
+	}),
 	server: {
 		url:
 			process.env.VITE_ADAPTER === 'vercel'
