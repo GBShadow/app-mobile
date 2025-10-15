@@ -8,7 +8,7 @@
 		"dev:static": "VITE_ADAPTER=static vite dev",
 		"dev:node": "VITE_ADAPTER=node vite dev --port 3000 --host",
 		"dev:android": "npx cap sync && npx cap run android && npm run dev",
-		"build": "vite build",
+		"build": "VITE_ADAPTER=vercel vite build",
 		"build-local": "npm run build:node && npm run build:static",
 		"build:node": "VITE_ADAPTER=node vite build",
 		"build:static": "VITE_ADAPTER=static vite build",
