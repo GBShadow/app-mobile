@@ -33,9 +33,9 @@ const config = {
 	kit: {
 		adapter:
 			process.env.VITE_ADAPTER === 'vercel'
-				? adapterNodeConfigured
+				? adapterVercelConfigured
 				: process.env.VITE_ADAPTER === 'node'
-					? adapterVercelConfigured
+					? adapterNodeConfigured
 					: adapterStaticConfigured,
 		...(process.env.VITE_ADAPTER !== 'vercel' && {
 			outDir:
