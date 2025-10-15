@@ -1,4 +1,5 @@
 import type { CapacitorConfig } from '@capacitor/cli';
+import 'dotenv/config';
 
 const config: CapacitorConfig = {
 	appId: 'com.example.app',

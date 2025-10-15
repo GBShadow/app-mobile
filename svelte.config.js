@@ -32,17 +32,15 @@ const config = {
 	preprocess: vitePreprocess(),
 	kit: {
 		adapter:
-			process.env.VITE_ADAPTER === 'node'
+			process.env.VITE_ADAPTER === 'vercel'
 				? adapterNodeConfigured
-				: process.env.VITE_ADAPTER === 'vercel'
+				: process.env.VITE_ADAPTER === 'node'
 					? adapterVercelConfigured
 					: adapterStaticConfigured,
-		outDir:
-			process.env.VITE_ADAPTER === 'node'
-				? '.svelte-kit/build-node'
-				: process.env.VITE_ADAPTER === 'vercel'
-					? '.svelte-kit/vercel'
-					: '.svelte-kit/build-static'
+		...(process.env.VITE_ADAPTER !== 'vercel' && {
+			outDir:
+				process.env.VITE_ADAPTER === 'node' ? '.svelte-kit/build-node' : '.svelte-kit/build-static'
+		})
 	} // this is important so building one adapter doesnt overwrite the other
 };
 
