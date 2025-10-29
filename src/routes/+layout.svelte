@@ -5,7 +5,7 @@
 	import { darkMode } from 'stdf/theme';
 
 	onMount(() => {
-		darkMode(true);
+		darkMode(false);
 	});
 
 	let { children } = $props();
