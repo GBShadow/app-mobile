@@ -24,7 +24,7 @@ export const getAgendas = query(async () => {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	return data?.data?.data?.agendas.map((v: any) => ({
 		value: v.id,
-		label: v.servico.nome,
-		group: `${v.cliente.nome} - ${v.data_inicio.replaceAll('-', '/')} / ${v.data_fim.replaceAll('-', '/')}`
+		label: `${v.servico.nome} - ${v.data_inicio.replaceAll('-', '/')} até ${v.data_fim.replaceAll('-', '/')}`,
+		group: `${v.cliente.nome}`
 	}));
 });

@@ -9,6 +9,7 @@
 	import Textarea from '$lib/components/textarea.svelte';
 	import Select from '$lib/components/select.svelte';
 	import { signout } from './api/auth.remote';
+	import { onMount } from 'svelte';
 
 	type Result = {
 		nomeEstabelecimento: string;
@@ -44,11 +45,23 @@
 		const response = await fetch(`/api?${params}`, {
 			method: 'GET'
 		});
-		resultData = await response.json();
+		const { error, data } = await response.json();
+		if (data) {
+			resultData = data;
+			docs.fields.valor.set(resultData?.valorTotal!);
+			docs.fields.data.set(resultData?.dataEmissao!);
+		}
+
+		if (error) {
+			console.log(error);
+		}
+
+		loading = false;
 	};
+
 	let { data } = $props();
 
-	$inspect(data.agendas);
+	$inspect(resultData);
 </script>
 
 <div class="flex items-center justify-between p-4 shadow-md">
@@ -61,7 +74,9 @@
 	<div class="space-y-6 p-4">
 		<button class="btn w-full btn-outline btn-primary" onclick={scanBarcode}>Ler QR Code</button>
 		{#if loading}
-			<span class="loading loading-md loading-spinner"></span>
+			<div class="grid grid-cols-1 items-center justify-center">
+				<span class="loading loading-md loading-spinner text-primary"></span>
+			</div>
 		{:else}
 			<form {...docs} enctype="multipart/form-data" class="space-y-4">
 				<Select
@@ -70,17 +85,21 @@
 					issues={docs.fields.agenda_id.issues()}
 					options={data.agendas}
 				/>
-				<Input
-					label="Data"
-					{...docs.fields.data.as('date')}
-					issues={docs.fields.data.issues()}
-					defaultValue={resultData?.dataEmissao}
+				<Select
+					label="Forma de Pagamento"
+					{...docs.fields.forma_pagamento.as('select')}
+					issues={docs.fields.forma_pagamento.issues()}
+					options={[
+						{ label: 'Adiantamento', value: 'adiantamento' },
+						{ label: 'Cartão Corporativo', value: 'cartao_corporativo' },
+						{ label: 'Recurso Próprio', value: 'recurso_proprio' }
+					]}
 				/>
+				<Input label="Data" {...docs.fields.data.as('date')} issues={docs.fields.data.issues()} />
 				<Input
 					label="Valor"
 					{...docs.fields.valor.as('text')}
 					issues={docs.fields.valor.issues()}
-					defaultValue={resultData?.valorTotal}
 				/>
 				<Textarea
 					label="Descrição"

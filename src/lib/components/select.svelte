@@ -6,10 +6,25 @@
 	interface Props extends HTMLSelectAttributes {
 		label?: string;
 		issues?: RemoteFormIssue[];
-		options: { value: string; label: string; group: string }[];
+		options: { value: string; label: string; group?: string }[];
 	}
 
-	let { label, issues = [], class: className, options, ...props }: Props = $props();
+	let { label, issues = [], class: className, options = [], ...props }: Props = $props();
+	let groups = $derived.by(() => {
+		const g = Object.groupBy(options, (v) => v.group!);
+
+		return Object.entries(g);
+	});
+
+	let { groups: gr2, hasGroup } = $derived.by(() => {
+		const hasGroup = options.every((v) => v.group);
+		const g = Object.groupBy(options, (v) => v.group!);
+
+		return {
+			groups: Object.entries(g),
+			hasGroup
+		};
+	});
 </script>
 
 <div class="space-y-2">
@@ -21,13 +36,21 @@
 		{/if}
 
 		<select {...props} class={cn('select w-full select-primary', className)}>
-			<option disabled selected>Selecione uma agenda</option>
+			<option disabled selected>Selecione uma opção...</option>
 
-			{#each options as option}
-				<optgroup label={option.group}>
+			{#if hasGroup}
+				{#each groups as group}
+					<optgroup label={group[0]}>
+						{#each group[1] as option}
+							<option value={option.value}>{option.label}</option>
+						{/each}
+					</optgroup>
+				{/each}
+			{:else}
+				{#each options as option}
 					<option value={option.value}>{option.label}</option>
-				</optgroup>
-			{/each}
+				{/each}
+			{/if}
 		</select>
 	</label>
 	{#each issues as issue}
