@@ -5,10 +5,10 @@
 		CapacitorBarcodeScannerAndroidScanningLibrary,
 		CapacitorBarcodeScannerTypeHint
 	} from '@capacitor/barcode-scanner';
-	import { Button, Cell, Loading, NavBar, Picker } from 'stdf';
-	import { docs } from './api/docs.remote';
+	import { docs, getAgendas } from './api/docs.remote';
 	import Textarea from '$lib/components/textarea.svelte';
 	import Select from '$lib/components/select.svelte';
+	import { signout } from './api/auth.remote';
 
 	type Result = {
 		nomeEstabelecimento: string;
@@ -28,7 +28,6 @@
 
 	let resultData: Result | undefined = $state();
 	let loading = $state(false);
-	let visible = $state(true);
 
 	const scanBarcode = async () => {
 		loading = true;
@@ -47,39 +46,29 @@
 		});
 		resultData = await response.json();
 	};
+	let { data } = $props();
+
+	$inspect(data.agendas);
 </script>
 
-<NavBar
-	title="App Leitor de Nota"
-	titleAlign="center"
-	injClass="!dark:text-white font-bold h-16 pt-4"
-	left={null}
->
-	{#snippet leftChild()}
-		<div></div>
-	{/snippet}
-</NavBar>
-
+<div class="flex items-center justify-between p-4 shadow-md">
+	<strong>App Leitor de Nota</strong>
+	<form {...signout}>
+		<button type="submit" class="btn btn-soft btn-error">Logout</button>
+	</form>
+</div>
 <div class="space-y-6">
-	<Button onclick={scanBarcode}>Ler QR Code</Button>
 	<div class="space-y-6 p-4">
+		<button class="btn w-full btn-outline btn-primary" onclick={scanBarcode}>Ler QR Code</button>
 		{#if loading}
-			<div class="mt-4">
-				<Loading />
-			</div>
+			<span class="loading loading-md loading-spinner"></span>
 		{:else}
-			<strong> Resultado </strong>
-
-			<form {...docs} enctype="multipart/form-data">
+			<form {...docs} enctype="multipart/form-data" class="space-y-4">
 				<Select
 					label="Agenda"
 					{...docs.fields.agenda_id.as('select')}
 					issues={docs.fields.agenda_id.issues()}
-					options={[
-						{ value: '1', label: 'Agenda 1' },
-						{ value: '2', label: 'Agenda 2' },
-						{ value: '3', label: 'Agenda 3' }
-					]}
+					options={data.agendas}
 				/>
 				<Input
 					label="Data"
@@ -104,7 +93,7 @@
 					issues={docs.fields.arquivo.issues()}
 				/>
 
-				<Button type="submit">Registrar</Button>
+				<button class="btn w-full btn-primary" type="submit">Registrar</button>
 			</form>
 		{/if}
 	</div>

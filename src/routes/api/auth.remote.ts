@@ -42,7 +42,10 @@ export const login = form(loginSchema, async (user) => {
 });
 
 export const signout = form(async () => {
-	const { cookies } = getRequestEvent();
+	const { cookies, locals } = getRequestEvent();
+
+	locals.token = null;
+	locals.user = null;
 
 	cookies.delete('svelte_app_token', {
 		path: '/'

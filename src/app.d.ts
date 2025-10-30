@@ -10,8 +10,8 @@ declare global {
 		// interface PageState {}
 		// interface Platform {}
 		interface Locals {
-			token?: string;
-			user?: User;
+			token?: string | null;
+			user?: User | null;
 		}
 	}
 }

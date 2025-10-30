@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { Button, Loading, NavBar } from 'stdf';
 	import { login } from '../api/auth.remote';
 	import Container from '$lib/components/container.svelte';
 	import Input from '$lib/components/input.svelte';
@@ -7,14 +6,8 @@
 </script>
 
 <Container>
-	<NavBar title="Login" titleAlign="center">
-		{#snippet leftChild()}
-			<div></div>
-		{/snippet}
-	</NavBar>
-
 	<div class="p-4">
-		<img src={logo} alt="" class="mx-auto w-1/2" />
+		<img src={logo} alt="" class="mx-auto w-1/2 max-w-96" />
 	</div>
 
 	<form {...login} class="space-y-6">
@@ -30,14 +23,14 @@
 				{...login.fields.senha.as('password')}
 				issues={login.fields.senha.issues()}
 			/>
-		</div>
 
-		<Button type="submit">
-			{#if login.pending}
-				<Loading />
-			{:else}
-				Login
-			{/if}
-		</Button>
+			<button class="btn w-full btn-primary" type="submit">
+				{#if login.pending}
+					<span class="loading loading-lg loading-spinner"></span>
+				{:else}
+					Login
+				{/if}
+			</button>
+		</div>
 	</form>
 </Container>

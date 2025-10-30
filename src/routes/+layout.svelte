@@ -2,11 +2,6 @@
 	import '../app.css';
 	import favicon from '$lib/assets/favicon.svg';
 	import { onMount } from 'svelte';
-	import { darkMode } from 'stdf/theme';
-
-	onMount(() => {
-		darkMode(false);
-	});
 
 	let { children } = $props();
 </script>

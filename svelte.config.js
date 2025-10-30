@@ -1,7 +1,6 @@
 // import adapterVercel from '@sveltejs/adapter-vercel';
 // import adapterStatic from '@sveltejs/adapter-static';
 // import adapterNode from '@sveltejs/adapter-node';
-import adapterAuto from '@sveltejs/adapter-auto';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 
 process.env.VITE_ADAPTER ??= 'node';
@@ -25,35 +24,36 @@ if (process.env.VITE_ADAPTER === 'node') {
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
 	preprocess: vitePreprocess(),
-	kit: {
-		adapter: adapterAuto(),
-		experimental: {
-			remoteFunctions: true
-		}
-	},
-	compilerOptions: {
-		experimental: {
-			async: true
-		}
-	},
-	vitePlugin: {
-		inspector: true
-	}
-	// },
 	// kit: {
+	// 	adapter: adapterAuto(),
 	// 	experimental: {
 	// 		remoteFunctions: true
-	// 	},
-	// 	adapter:
-	// 		process.env.VITE_ADAPTER === 'vercel'
-	// 			? adapterVercelConfigured
-	// 			: process.env.VITE_ADAPTER === 'node'
-	// 				? adapterNodeConfigured
-	// 				: adapterStaticConfigured,
-	// 	...(process.env.VITE_ADAPTER !== 'vercel' && {
-	// 		outDir:
-	// 			process.env.VITE_ADAPTER === 'node' ? '.svelte-kit/build-node' : '.svelte-kit/build-static'
-	// 	})
+	// 	}
+	// },
+	// compilerOptions: {
+	// 	experimental: {
+	// 		async: true
+	// 	}
+	// },
+	// vitePlugin: {
+	// 	inspector: true
+	// }
+	// },
+	kit: {
+		experimental: {
+			remoteFunctions: true
+		},
+		adapter:
+			process.env.VITE_ADAPTER === 'vercel'
+				? adapterVercelConfigured
+				: process.env.VITE_ADAPTER === 'node'
+					? adapterNodeConfigured
+					: adapterStaticConfigured,
+		...(process.env.VITE_ADAPTER !== 'vercel' && {
+			outDir:
+				process.env.VITE_ADAPTER === 'node' ? '.svelte-kit/build-node' : '.svelte-kit/build-static'
+		})
+	}
 };
 
 export default config;

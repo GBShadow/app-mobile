@@ -1,13 +1,10 @@
 <script lang="ts">
-	import { Button, Loading, NavBar } from 'stdf';
 	import { signup } from '../../api/auth.remote';
 	import Input from '$lib/components/input.svelte';
 	import Container from '$lib/components/container.svelte';
 </script>
 
 <Container>
-	<NavBar title="Registar Usuário" />
-
 	<form {...signup}>
 		<div class="px-4">
 			<Input title="Nome" placeholder="Seu Nome" {...signup.fields.name.as('text')} />
@@ -27,13 +24,13 @@
 		</div>
 
 		<div class="w-full">
-			<Button type="submit">
+			<button type="submit">
 				{#if signup.pending}
-					<Loading />
+					<span></span>
 				{:else}
 					Registrar
 				{/if}
-			</Button>
+			</button>
 		</div>
 	</form>
 </Container>

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '$lib';
 	import type { RemoteFormIssue } from '@sveltejs/kit';
 	import type { HTMLTextareaAttributes } from 'svelte/elements';
 
@@ -7,21 +8,18 @@
 		issues?: RemoteFormIssue[];
 	}
 
-	let { label, issues = [], ...props }: Props = $props();
+	let { label, issues = [], class: className, ...props }: Props = $props();
 </script>
 
-<div class="space-y-1">
-	<label class="relative mt-2 block">
+<div class="space-y-2">
+	<label class="space-y-3">
 		{#if label}
-			<span class="text-sm font-medium text-text dark:text-primaryWhite">
+			<span class="block text-sm font-medium">
 				{label}
 			</span>
 		{/if}
 
-		<textarea
-			{...props}
-			class="mt-0.5 w-full rounded bg-primary-700/40 px-4 py-2 text-text shadow-sm outline-0 transition-all focus:bg-transparent focus:ring focus:ring-primary-500 sm:text-sm dark:text-primaryWhite"
-		></textarea>
+		<textarea {...props} class={cn('textarea w-full textarea-primary', className)}></textarea>
 	</label>
 	{#each issues as issue}
 		<p class="text-sm text-error">{issue.message}</p>
