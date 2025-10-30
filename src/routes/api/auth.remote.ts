@@ -14,14 +14,43 @@ export const signup = form(signupSchema, async (user) => {
 });
 
 export const login = form(loginSchema, async (user) => {
-	const { request } = getRequestEvent();
-	await auth.api.signInEmail({ body: user, headers: request.headers });
+	const { fetch, cookies } = getRequestEvent();
+
+	const response = await fetch(
+		'https://homolog.txaicon.txaidesenvolvimento.com.br/api/v2/auth/login',
+		{
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(user)
+		}
+	);
+
+	const { data } = await response.json();
+
+	cookies.set('svelte_app_token', data.data.token, {
+		path: '/',
+		maxAge: 60 * 60 * 8 // 8 hours
+	});
+	cookies.set('svelte_app_user', JSON.stringify(data.data.user), {
+		path: '/',
+		maxAge: 60 * 60 * 8 // 8 hours
+	});
+
 	redirect(303, '/');
 });
 
 export const signout = form(async () => {
-	const { request } = getRequestEvent();
-	await auth.api.signOut({ headers: request.headers });
+	const { cookies } = getRequestEvent();
+
+	cookies.delete('svelte_app_token', {
+		path: '/'
+	});
+	cookies.delete('svelte_app_user', {
+		path: '/'
+	});
+
 	redirect(303, '/login');
 });
 

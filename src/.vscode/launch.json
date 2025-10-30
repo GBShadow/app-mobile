@@ -1,7 +1,0 @@
-{
-	"type": "node",
-	"request": "launch",
-	"name": "Debug SvelteKit",
-	"runtimeExecutable": "npm",
-	"runtimeArgs": ["run", "dev"]
-}

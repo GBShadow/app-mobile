@@ -1,8 +1,8 @@
 <script lang="ts">
 	import type { RemoteFormIssue } from '@sveltejs/kit';
-	import type { HTMLInputAttributes } from 'svelte/elements';
+	import type { HTMLTextareaAttributes } from 'svelte/elements';
 
-	interface Props extends HTMLInputAttributes {
+	interface Props extends HTMLTextareaAttributes {
 		label?: string;
 		issues?: RemoteFormIssue[];
 	}
@@ -18,10 +18,10 @@
 			</span>
 		{/if}
 
-		<input
+		<textarea
 			{...props}
 			class="mt-0.5 w-full rounded bg-primary-700/40 px-4 py-2 text-text shadow-sm outline-0 transition-all focus:bg-transparent focus:ring focus:ring-primary-500 sm:text-sm dark:text-primaryWhite"
-		/>
+		></textarea>
 	</label>
 	{#each issues as issue}
 		<p class="text-sm text-error">{issue.message}</p>

@@ -20,15 +20,15 @@
 	<form {...login} class="space-y-6">
 		<div class="w-full space-y-4 px-4">
 			<Input
-				label="E-mail"
-				{...login.fields.email.as('email')}
-				issues={login.fields.email.issues()}
+				label="Usuário"
+				{...login.fields.usuario.as('text')}
+				issues={login.fields.usuario.issues()}
 			/>
 
 			<Input
 				label="Senha"
-				{...login.fields.password.as('password')}
-				issues={login.fields.password.issues()}
+				{...login.fields.senha.as('password')}
+				issues={login.fields.senha.issues()}
 			/>
 		</div>
 
@@ -39,8 +39,5 @@
 				Login
 			{/if}
 		</Button>
-		<div class="grid place-items-center">
-			<a href="/usuario/criar">Registrar Usuário</a>
-		</div>
 	</form>
 </Container>

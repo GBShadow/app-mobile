@@ -1,12 +1,14 @@
 <script lang="ts">
+	import Input from '$lib/components/input.svelte';
 	import {
 		CapacitorBarcodeScanner,
 		CapacitorBarcodeScannerAndroidScanningLibrary,
 		CapacitorBarcodeScannerTypeHint
 	} from '@capacitor/barcode-scanner';
-
-	import { goto } from '$app/navigation';
-	import { Button, Loading, NavBar } from 'stdf';
+	import { Button, Cell, Loading, NavBar, Picker } from 'stdf';
+	import { docs } from './api/docs.remote';
+	import Textarea from '$lib/components/textarea.svelte';
+	import Select from '$lib/components/select.svelte';
 
 	type Result = {
 		nomeEstabelecimento: string;
@@ -26,6 +28,7 @@
 
 	let resultData: Result | undefined = $state();
 	let loading = $state(false);
+	let visible = $state(true);
 
 	const scanBarcode = async () => {
 		loading = true;
@@ -51,80 +54,58 @@
 	titleAlign="center"
 	injClass="!dark:text-white font-bold h-16 pt-4"
 	left={null}
-/>
+>
+	{#snippet leftChild()}
+		<div></div>
+	{/snippet}
+</NavBar>
 
 <div class="space-y-6">
 	<Button onclick={scanBarcode}>Ler QR Code</Button>
 	<div class="space-y-6 p-4">
-		<div class="grid grid-cols-1 place-items-center bg-primary-500 p-4 text-white">
-			<strong class="text-white"> Resultado </strong>
-			{#if loading}
-				<div class="mt-4">
-					<Loading />
-				</div>
-			{:else}
-				<strong class="text-center text-lg">{resultData?.nomeEstabelecimento}</strong>
-				<strong class="text-center text-lg">
-					CNPJ:
-					<span class="font-normal">
-						{resultData?.cnpj}
-					</span>
-				</strong>
-				<div class="flex gap-4">
-					<strong class="grid grid-cols-1">
-						Numero da Nota:
-						<span class="font-normal">
-							{resultData?.numeroNota}
-						</span>
-					</strong>
-					<strong class="grid grid-cols-1">
-						Data de Emissão:
-						<span class="font-normal">
-							{resultData?.dataEmissao}
-						</span>
-					</strong>
-				</div>
-				<div class="w-full overflow-x-auto">
-					<table class="min-w-full divide-y divide-white">
-						<thead class="">
-							<tr>
-								<th scope="col" class="px-4 py-3.5 text-left text-sm font-normal text-white"
-									>Código</th
-								>
-								<th scope="col" class="px-4 py-3.5 text-left text-sm font-normal text-white"
-									>Nome</th
-								>
-								<th scope="col" class="px-4 py-3.5 text-left text-sm font-normal text-white"
-									>Quantidade</th
-								>
-								<th scope="col" class="px-4 py-3.5 text-left text-sm font-normal text-white"
-									>Vl. Uni</th
-								>
-								<th scope="col" class="px-4 py-3.5 text-left text-sm font-normal text-white"
-									>Vl. Total</th
-								>
-							</tr>
-						</thead>
-						<tbody class="divide-y divide-white dark:divide-gray-700">
-							{#each resultData?.itens as item}
-								<tr>
-									<td class="px-4 py-4 text-sm whitespace-nowrap">{item.codigo}</td>
-									<td class="px-4 py-4 text-sm whitespace-nowrap">{item.descricao}</td>
-									<td class="px-4 py-4 text-sm whitespace-nowrap">{item.quantidade}</td>
-									<td class="px-4 py-4 text-sm whitespace-nowrap">{item.valorUnitario}</td>
-									<td class="px-4 py-4 text-sm whitespace-nowrap">{item.valorTotal}</td>
-								</tr>
-							{/each}
-							<tr>
-								<td colspan="5" align="right" class="px-4 py-4 text-sm whitespace-nowrap"
-									><strong> Valor Total: </strong>
-									{resultData?.valorTotal}</td
-								>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-			{/if}
-		</div>
+		{#if loading}
+			<div class="mt-4">
+				<Loading />
+			</div>
+		{:else}
+			<strong> Resultado </strong>
+
+			<form {...docs} enctype="multipart/form-data">
+				<Select
+					label="Agenda"
+					{...docs.fields.agenda_id.as('select')}
+					issues={docs.fields.agenda_id.issues()}
+					options={[
+						{ value: '1', label: 'Agenda 1' },
+						{ value: '2', label: 'Agenda 2' },
+						{ value: '3', label: 'Agenda 3' }
+					]}
+				/>
+				<Input
+					label="Data"
+					{...docs.fields.data.as('date')}
+					issues={docs.fields.data.issues()}
+					defaultValue={resultData?.dataEmissao}
+				/>
+				<Input
+					label="Valor"
+					{...docs.fields.valor.as('text')}
+					issues={docs.fields.valor.issues()}
+					defaultValue={resultData?.valorTotal}
+				/>
+				<Textarea
+					label="Descrição"
+					{...docs.fields.descricao.as('text')}
+					issues={docs.fields.descricao.issues()}
+				/>
+				<Input
+					label="Arquivo"
+					{...docs.fields.arquivo.as('file')}
+					issues={docs.fields.arquivo.issues()}
+				/>
+
+				<Button type="submit">Registrar</Button>
+			</form>
+		{/if}
 	</div>
 </div>
