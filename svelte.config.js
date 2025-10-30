@@ -1,21 +1,21 @@
-// import adapterVercel from '@sveltejs/adapter-vercel';
-// import adapterStatic from '@sveltejs/adapter-static';
-// import adapterNode from '@sveltejs/adapter-node';
+import adapterVercel from '@sveltejs/adapter-vercel';
+import adapterStatic from '@sveltejs/adapter-static';
+import adapterNode from '@sveltejs/adapter-node';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 
 process.env.VITE_ADAPTER ??= 'node';
 
-// const adapterStaticConfigured = adapterStatic({
-// 	fallback: 'index.html',
-// 	pages: 'build-static',
-// 	assets: 'build-static'
-// });
+const adapterStaticConfigured = adapterStatic({
+	fallback: 'index.html',
+	pages: 'build-static',
+	assets: 'build-static'
+});
 
-// const adapterNodeConfigured = adapterNode({
-// 	out: 'build-node'
-// });
+const adapterNodeConfigured = adapterNode({
+	out: 'build-node'
+});
 
-// const adapterVercelConfigured = adapterVercel();
+const adapterVercelConfigured = adapterVercel();
 
 if (process.env.VITE_ADAPTER === 'node') {
 	process.env.PUBLIC_API_BASE = '';
