@@ -1,15 +1,15 @@
 import { redirect } from '@sveltejs/kit';
 import { form, getRequestEvent, query } from '$app/server';
-import { auth } from '$lib/server/auth';
+// import { auth } from '$lib/server/auth';
 import { signupSchema, loginSchema } from '$lib/schema/auth';
 
 function delay(ms: number) {
 	return new Promise((resolve) => setTimeout(() => resolve(null), ms));
 }
 
-export const signup = form(signupSchema, async (user) => {
+export const signup = form(signupSchema, async () => {
 	await delay(2000);
-	await auth.api.signUpEmail({ body: user });
+	// await auth.api.signUpEmail({ body: user });
 	redirect(307, `/login`);
 });
 
