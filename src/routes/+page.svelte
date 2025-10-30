@@ -64,7 +64,7 @@
 	$inspect(resultData);
 </script>
 
-<div class="flex items-center justify-between p-4 shadow-md">
+<div class="flex items-center justify-between p-4 pt-10 shadow-md">
 	<strong>App Leitor de Nota</strong>
 	<form {...signout}>
 		<button type="submit" class="btn btn-soft btn-error">Logout</button>
@@ -74,7 +74,7 @@
 	<div class="space-y-6 p-4">
 		<button class="btn w-full btn-outline btn-primary" onclick={scanBarcode}>Ler QR Code</button>
 		{#if loading}
-			<div class="grid grid-cols-1 items-center justify-center">
+			<div class="grid w-full grid-cols-1 place-items-center">
 				<span class="loading loading-md loading-spinner text-primary"></span>
 			</div>
 		{:else}
