@@ -32,17 +32,16 @@ export const login = form(loginSchema, async (user) => {
 
 		cookies.set('svelte_app_token', data.data.token, {
 			path: '/',
-			maxAge: 60 * 60 * 4 // 4 hours
+			maxAge: 60 * 60 * 4 // 8 hours
 		});
 		cookies.set('svelte_app_user', JSON.stringify(data.data.user), {
 			path: '/',
-			maxAge: 60 * 60 * 4 // 4 hours
+			maxAge: 60 * 60 * 4 // 8 hours
 		});
-
-		redirect(303, '/');
 	} catch {
 		error(401, 'usuario/senha invalidos');
 	}
+	redirect(303, '/');
 });
 
 export const signout = form(async () => {

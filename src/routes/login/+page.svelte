@@ -3,6 +3,7 @@
 	import Input from '$lib/components/input.svelte';
 	import logo from '$lib/assets/logo.png';
 	import { getToastState } from '$lib/toast-state.svelte';
+
 	const toastState = getToastState();
 </script>
 
@@ -17,6 +18,7 @@
 				await submit();
 			} catch (err) {
 				const error = JSON.parse(err as string) as Error;
+
 				toastState.add({
 					title: 'Erro!',
 					message: error.message,
