@@ -1,4 +1,4 @@
-import { redirect } from '@sveltejs/kit';
+import { error, redirect } from '@sveltejs/kit';
 import { form, getRequestEvent, query } from '$app/server';
 // import { auth } from '$lib/server/auth';
 import { signupSchema, loginSchema } from '$lib/schema/auth';
@@ -16,29 +16,33 @@ export const signup = form(signupSchema, async () => {
 export const login = form(loginSchema, async (user) => {
 	const { fetch, cookies } = getRequestEvent();
 
-	const response = await fetch(
-		'https://homolog.txaicon.txaidesenvolvimento.com.br/api/v2/auth/login',
-		{
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify(user)
-		}
-	);
+	try {
+		const response = await fetch(
+			'https://homolog.txaicon.txaidesenvolvimento.com.br/api/v2/auth/login',
+			{
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(user)
+			}
+		);
 
-	const { data } = await response.json();
+		const { data } = await response.json();
 
-	cookies.set('svelte_app_token', data.data.token, {
-		path: '/',
-		maxAge: 60 * 60 * 4 // 8 hours
-	});
-	cookies.set('svelte_app_user', JSON.stringify(data.data.user), {
-		path: '/',
-		maxAge: 60 * 60 * 4 // 8 hours
-	});
+		cookies.set('svelte_app_token', data.data.token, {
+			path: '/',
+			maxAge: 60 * 60 * 4 // 4 hours
+		});
+		cookies.set('svelte_app_user', JSON.stringify(data.data.user), {
+			path: '/',
+			maxAge: 60 * 60 * 4 // 4 hours
+		});
 
-	redirect(303, '/');
+		redirect(303, '/');
+	} catch {
+		error(401, 'usuario/senha invalidos');
+	}
 });
 
 export const signout = form(async () => {

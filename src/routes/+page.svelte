@@ -10,8 +10,6 @@
 	import Select from '$lib/components/select.svelte';
 	import { signout } from './api/auth.remote';
 	import { getToastState } from '$lib/toast-state.svelte';
-	import { invalidateAll } from '$app/navigation';
-	import { applyAction } from '$app/forms';
 
 	type Result = {
 		nomeEstabelecimento: string;
