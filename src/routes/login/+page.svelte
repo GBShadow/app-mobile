@@ -1,16 +1,15 @@
 <script lang="ts">
 	import { login } from '../api/auth.remote';
-	import Container from '$lib/components/container.svelte';
 	import Input from '$lib/components/input.svelte';
 	import logo from '$lib/assets/logo.png';
 </script>
 
-<Container>
-	<div class="p-4">
+<div class="h-[100dvh] bg-primary p-4">
+	<div class="mt-30 p-4">
 		<img src={logo} alt="" class="mx-auto w-1/2 max-w-96" />
 	</div>
 
-	<form {...login} class="space-y-6">
+	<form {...login} class="mt-10 space-y-6 rounded-xl bg-base-100 p-4">
 		<div class="w-full space-y-4 px-4">
 			<Input
 				label="Usuário"
@@ -33,4 +32,4 @@
 			</button>
 		</div>
 	</form>
-</Container>
+</div>

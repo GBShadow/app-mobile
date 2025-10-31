@@ -30,3 +30,10 @@ export const handle: Handle = async ({ event, resolve }) => {
 	// 	building
 	// });
 };
+
+// export const handleValidationError: HandleValidationError = ({ issues }) => {
+// 	return {
+// 		message: 'Error!',
+// 		issues
+// 	};
+// };

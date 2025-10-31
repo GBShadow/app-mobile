@@ -36,7 +36,7 @@
 		{/if}
 
 		<select {...props} class={cn('select w-full select-primary', className)}>
-			<option disabled selected>Selecione uma opção...</option>
+			<option disabled selected value="">Selecione uma opção...</option>
 
 			{#if hasGroup}
 				{#each groups as group}
