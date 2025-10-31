@@ -150,7 +150,13 @@
 					issues={docs.fields.arquivo.issues()}
 				/>
 
-				<button class="btn w-full btn-primary" type="submit">Salvar</button>
+				<button disabled={!!docs.pending} class="btn w-full btn-primary" type="submit">
+					{#if docs.pending}
+						<span class="loading loading-lg loading-spinner"></span>
+					{:else}
+						Salvar
+					{/if}
+				</button>
 			</form>
 		{/if}
 	</div>
