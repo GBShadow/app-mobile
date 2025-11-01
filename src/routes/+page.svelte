@@ -10,6 +10,7 @@
 	import Select from '$lib/components/select.svelte';
 	import { signout } from './api/auth.remote';
 	import { getToastState } from '$lib/toast-state.svelte';
+	import InputFile from '$lib/components/input-file.svelte';
 
 	type Result = {
 		nomeEstabelecimento: string;
@@ -33,38 +34,42 @@
 	const toastState = getToastState();
 
 	const scanBarcode = async () => {
-		loading = true;
-		const result = await CapacitorBarcodeScanner.scanBarcode({
-			hint: CapacitorBarcodeScannerTypeHint.QR_CODE,
-			android: {
-				scanningLibrary: CapacitorBarcodeScannerAndroidScanningLibrary.MLKIT
-			},
-			web: { showCameraSelection: true }
-		});
-
-		const params = new URLSearchParams();
-		params.append('url', result.ScanResult);
-		const response = await fetch(`/api?${params}`, {
-			method: 'GET'
-		});
-		const { error, data } = await response.json();
-		if (data) {
-			resultData = data;
-			docs.fields.valor.set(resultData?.valorTotal!);
-			docs.fields.data.set(resultData?.dataEmissao!);
-			toastState.add({
-				title: 'Info.',
-				message: 'Leitura do QR Code realizada!',
-				variant: 'alert-info'
+		try {
+			const result = await CapacitorBarcodeScanner.scanBarcode({
+				hint: CapacitorBarcodeScannerTypeHint.QR_CODE,
+				android: {
+					scanningLibrary: CapacitorBarcodeScannerAndroidScanningLibrary.MLKIT
+				},
+				web: { showCameraSelection: true }
 			});
-		}
 
-		if (error) {
+			loading = true;
+
+			const params = new URLSearchParams();
+			params.append('url', result.ScanResult);
+			const response = await fetch(`/api?${params}`, {
+				method: 'GET'
+			});
+			const { error, data } = await response.json();
+			if (data) {
+				resultData = data;
+				docs.fields.valor.set(resultData?.valorTotal!);
+				docs.fields.data.set(resultData?.dataEmissao!);
+				toastState.add({
+					title: 'Info.',
+					message: 'Leitura do QR Code realizada!',
+					variant: 'alert-info'
+				});
+			}
+
+			if (error) {
+				toastState.add({ title: 'Erro!', message: 'Erro ao ler QR Code!', variant: 'alert-error' });
+			}
+		} catch {
 			toastState.add({ title: 'Erro!', message: 'Erro ao ler QR Code!', variant: 'alert-error' });
-			console.log(error);
+		} finally {
+			loading = false;
 		}
-
-		loading = false;
 	};
 </script>
 
@@ -143,7 +148,7 @@
 					{...docs.fields.descricao.as('text')}
 					issues={docs.fields.descricao.issues()}
 				/>
-				<Input
+				<InputFile
 					label="Arquivo"
 					{...docs.fields.arquivo.as('file')}
 					issues={docs.fields.arquivo.issues()}

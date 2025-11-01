@@ -49,6 +49,7 @@
 					label="Senha"
 					{...login.fields.senha.as('password')}
 					issues={login.fields.senha.issues()}
+					password
 				/>
 
 				<button class="btn w-full btn-primary" type="submit">

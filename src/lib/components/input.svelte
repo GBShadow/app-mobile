@@ -3,13 +3,26 @@
 	import type { RemoteFormIssue } from '@sveltejs/kit';
 	import type { HTMLInputAttributes } from 'svelte/elements';
 	import { imask } from '@imask/svelte';
+	import { Icon, Eye, EyeSlash } from 'svelte-hero-icons';
+
 	interface Props extends HTMLInputAttributes {
 		label?: string;
 		issues?: RemoteFormIssue[];
 		mask?: 'R$';
+		password?: boolean;
 	}
 
-	let { label, issues = [], class: className, mask, type, ...props }: Props = $props();
+	let {
+		label,
+		issues = [],
+		class: className,
+		mask,
+		type,
+		password = false,
+		...props
+	}: Props = $props();
+
+	let inputType = $state(type);
 
 	const moneyMaskOptions = {
 		mask: Number,
@@ -28,16 +41,22 @@
 			</span>
 		{/if}
 
-		<input
-			{...props}
-			use:imask={mask === 'R$' ? moneyMaskOptions : undefined}
-			{type}
-			class={cn(
-				'w-full',
-				type === 'file' ? 'file-input file-input-primary' : 'input input-primary',
-				className
-			)}
-		/>
+		<div class="input w-full input-primary">
+			<input
+				{...props}
+				use:imask={mask === 'R$' ? moneyMaskOptions : undefined}
+				type={password ? inputType : type}
+				class={cn('w-full ', className)}
+			/>
+			{#if password}
+				<button
+					type="button"
+					onclick={() => (inputType = inputType === 'password' ? 'text' : 'password')}
+				>
+					<Icon src={inputType === 'password' ? Eye : EyeSlash} class="size-5 text-primary" />
+				</button>
+			{/if}
+		</div>
 	</label>
 	{#each issues as issue}
 		<p class="text-sm text-error">{issue.message}</p>
