@@ -136,6 +136,7 @@
 					label="Valor"
 					{...docs.fields.valor.as('text')}
 					issues={docs.fields.valor.issues()}
+					mask="R$"
 				/>
 				<Textarea
 					label="Descrição"

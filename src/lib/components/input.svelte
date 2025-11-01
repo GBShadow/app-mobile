@@ -2,13 +2,22 @@
 	import { cn } from '$lib';
 	import type { RemoteFormIssue } from '@sveltejs/kit';
 	import type { HTMLInputAttributes } from 'svelte/elements';
-
+	import { imask } from '@imask/svelte';
 	interface Props extends HTMLInputAttributes {
 		label?: string;
 		issues?: RemoteFormIssue[];
+		mask?: 'R$';
 	}
 
-	let { label, issues = [], class: className, type, ...props }: Props = $props();
+	let { label, issues = [], class: className, mask, type, ...props }: Props = $props();
+
+	const moneyMaskOptions = {
+		mask: Number,
+		scale: 2,
+		thousandsSeparator: '.',
+		normalizeZeros: true,
+		padFractionalZeros: false
+	};
 </script>
 
 <div class="space-y-2">
@@ -21,6 +30,7 @@
 
 		<input
 			{...props}
+			use:imask={mask === 'R$' ? moneyMaskOptions : undefined}
 			{type}
 			class={cn(
 				'w-full',
